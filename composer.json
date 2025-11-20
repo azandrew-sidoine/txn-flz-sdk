@@ -1,0 +1,45 @@
+{
+    "name": "drewlabs/txn-flooz-client",
+    "description": "Flooz API driver for txn platform",
+    "type": "library",
+    "require-dev": {
+        "phpunit/phpunit": "^12.4"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Drewlabs\\Txn\\Flooz\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Drewlabs\\Txn\\Flooz\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "azandrew-sidoine",
+            "email": "azandrewdevelopper@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^7.2|^8.0",
+        "drewlabs/libman": "^0.2.9",
+        "drewlabs/txn-contracts": "^0.2.2",
+        "drewlabs/flz-sdk": "@dev"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/Users/azandrew/workspace/lib/php/flooz",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
+}
