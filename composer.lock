@@ -61,7 +61,7 @@
             "dist": {
                 "type": "path",
                 "url": "/Users/azandrew/workspace/lib/php/flooz",
-                "reference": "5dee44d5e7eecfc505e931f230d05a55a7dde760"
+                "reference": "4b951f04c2bc775095b42b92857a0c050b029e0b"
             },
             "require": {
                 "drewlabs/curl-client": "^0.4.0",
