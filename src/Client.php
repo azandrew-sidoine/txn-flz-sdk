@@ -3,7 +3,7 @@
 namespace Drewlabs\Txn\Flooz;
 
 use Drewlabs\Flz\Contracts\MerchantInterface;
-use Drewlabs\Flz\Contracts\RequestClientInterface;
+use Drewlabs\Flz\Contracts\TransactionClientInterface;
 use Drewlabs\Flz\Debit;
 use Drewlabs\Flz\DebitStatusResult;
 use Drewlabs\Txn\OneWayTransactionProcessorInterface;
@@ -15,7 +15,7 @@ use Drewlabs\Txn\TransactionResultListener;
 class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInterface, TransactionalProcessorLibraryInterface
 {
 
-    /** @var RequestClientInterface */
+    /** @var TransactionClientInterface */
     private $client;
 
     /** @var MerchantInterface */
@@ -28,10 +28,10 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
      * creates new flz txn client instance
      * 
      * @param MerchantInterface $merchant 
-     * @param RequestClientInterface $client 
+     * @param TransactionClientInterface $client 
      * @return void 
      */
-    public function __construct(MerchantInterface $merchant, RequestClientInterface $client)
+    public function __construct(MerchantInterface $merchant, TransactionClientInterface $client)
     {
         $this->merchant = $merchant;
         $this->client = $client;
@@ -41,16 +41,20 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
     {
 
         $result = DebitStatusResult::fromJson($response);
-
         if (is_null($metadata = $result->getMetadata())) {
             return null;
         }
 
+        $value = $this->client->checkTransaction($result->getOrderRef(), $this->merchant->getAddress());
+        if (!$value->isProcessed()) {
+            return null;
+        }
+
         return new TransactionResult(
-            $metadata->getTxnReference(),
+            $result->getOrderRef(),
             $result->getStatus(),
             $result->getMessage(),
-            $metadata->getFloozReference(),
+            $result->getPaymentRef(),
             $metadata->getDate()
         );
     }
@@ -66,6 +70,7 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
             ->withTxnReference($transaction->getReference());
 
         $response = $this->client->sendRequest($debit);
+
         return $response->isOk();
     }
 
