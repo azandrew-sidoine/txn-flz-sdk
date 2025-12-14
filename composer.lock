@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b982658e13be596467abad6c0bf5d8a",
+    "content-hash": "c09564cf4a35303962e7f453898e386c",
     "packages": [
         {
             "name": "drewlabs/curl-client",
@@ -61,7 +61,7 @@
             "dist": {
                 "type": "path",
                 "url": "/Users/azandrew/workspace/lib/php/flooz",
-                "reference": "d93a6a153da8c6b60f73e7f98a17cb443fff5f8a"
+                "reference": "5fe6499831415d1d30a94bd3d3e96bf5f577b74c"
             },
             "require": {
                 "drewlabs/curl-client": "^0.4.0",
@@ -94,16 +94,16 @@
         },
         {
             "name": "drewlabs/libman",
-            "version": "v0.2.9",
+            "version": "v0.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/azandrew-sidoine/php-libman.git",
-                "reference": "f8eab8edade1d51e5d3be3a8d04e94dbd6d94e6d"
+                "reference": "3f039ba25884b74a639e98dd57c11180b86c1d72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/azandrew-sidoine/php-libman/zipball/f8eab8edade1d51e5d3be3a8d04e94dbd6d94e6d",
-                "reference": "f8eab8edade1d51e5d3be3a8d04e94dbd6d94e6d",
+                "url": "https://api.github.com/repos/azandrew-sidoine/php-libman/zipball/3f039ba25884b74a639e98dd57c11180b86c1d72",
+                "reference": "3f039ba25884b74a639e98dd57c11180b86c1d72",
                 "shasum": ""
             },
             "require": {
@@ -139,9 +139,9 @@
             "description": "Libman package is a small PHP utility library used in installing, creating business specific class instance using configuration based approach",
             "support": {
                 "issues": "https://github.com/azandrew-sidoine/php-libman/issues",
-                "source": "https://github.com/azandrew-sidoine/php-libman/tree/v0.2.9"
+                "source": "https://github.com/azandrew-sidoine/php-libman/tree/v0.2.10"
             },
-            "time": "2024-09-19T16:38:20+00:00"
+            "time": "2025-12-14T13:08:51+00:00"
         },
         {
             "name": "drewlabs/txn-contracts",

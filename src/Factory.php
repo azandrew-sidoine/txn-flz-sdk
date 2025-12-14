@@ -18,17 +18,20 @@ class Factory implements LibraryFactoryInterface
     {
         $configuration = $config->getConfiguration();
         $host = ($config instanceof WebServiceLibraryConfigInterface) ? ($config->getHost() ?? '') : ($config->getConfiguration()->get('api.host', '') ?? '');
-        $hostname = sprintf('%s://%s', parse_url($host, \PHP_URL_SCHEME), parse_url($host, \PHP_URL_HOST));
+        $host = static::baseurl($host ?? '');
+        if (is_null($host)) {
+            throw new \RuntimeException('bad configuration, api.host configuration value is not a valid URL');
+        }
 
         // create new client instance
         [$user, $password, $token] = [
-            $configuration->get('credentials.user') ?? $configuration->get('api.credentials.user'), 
-            $configuration->get('credentials.password') ?? $configuration->get('api.credentials.password'),
-            $configuration->get('credentials.token') ?? $configuration->get('api.credentials.token')
+            $configuration->get('credentials.user',  $configuration->get('api.credentials.user')),
+            $configuration->get('credentials.password', $configuration->get('api.credentials.password')),
+            $configuration->get('credentials.token', $configuration->get('api.credentials.token'))
         ];
 
         if (is_null($token)) {
-            throw new \RuntimeException('missing crendentials.token configuration value'); 
+            throw new \RuntimeException('missing crendentials.token configuration value');
         }
 
         if ((is_null($user) || is_null($password)) && $config instanceof AuthBasedLibraryConfigInterface && ($auth = $config->getAuth())) {
@@ -38,7 +41,7 @@ class Factory implements LibraryFactoryInterface
 
         /** @var TokenFactoryInterface|null */
         $factory = null;
-        
+
         if (!is_null($user) && !is_null($password) && !is_null($token)) {
             $factory = new BasicAuthTokenFactory($user, $password, $token);
         } else if ((is_null($user) || is_null($password)) && !is_null($token)) {
@@ -48,15 +51,34 @@ class Factory implements LibraryFactoryInterface
         if (is_null($factory)) {
             throw new \RuntimeException('Invalid configuration missing api key, or basic auth credentials.');
         }
-        
+
         $merchantName = $configuration->get('merchant.name', $configuration->get('api.merchant.name'));
         $merchantRef = $configuration->get('merchant.ref', $configuration->get('api.merchant.ref'));
         $merchantMsisdn = $configuration->get('merchant.msisdn', $configuration->get('api.merchant.msisdn'));
         $merchant = new Merchant($merchantMsisdn, $merchantRef, $merchantName);
-        $debitAPI  = Flooz::NewDebit($hostname, $factory);
+
+        $debitAPI  = Flooz::NewDebit($host, $factory);
 
         // returns the contructed client
         return new Client($merchant, $debitAPI);
     }
 
+
+    private static function baseurl($url)
+    {
+        $components = parse_url($url);
+        if ($components === false) {
+            return null;
+        }
+
+        $scheme = isset($components['scheme']) ? $components['scheme'] : 'http';
+        $host = isset($components['host']) ? $components['host'] : '';
+        $port = isset($components['port']) ? sprintf(":%s", $components['port']) : '';
+
+        if ($host === '') {
+            return null;
+        }
+
+        return $scheme . '://' . $host . $port;
+    }
 }

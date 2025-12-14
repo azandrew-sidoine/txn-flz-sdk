@@ -71,6 +71,8 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
 
         $response = $this->client->sendRequest($debit);
 
+        print_r($response);
+
         return $response->isOk();
     }
 
