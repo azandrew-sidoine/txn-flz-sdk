@@ -21,7 +21,7 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
     /** @var MerchantInterface */
     private $merchant;
 
-    /** @var array list of transaction response listeners. */
+    /** @var array<TransactionResultListener> list of transaction response listeners. */
     private $responseListeners = [];
 
     /**
@@ -46,12 +46,13 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
         }
 
         $value = $this->client->checkTransaction($result->getOrderRef(), $this->merchant->getAddress());
-        if (!$value->isProcessed()) {
+        if (is_null($value)) {
             return null;
         }
 
         return new TransactionResult(
             $result->getOrderRef(),
+            $value->isProcessed(),
             $result->getStatus(),
             $result->getMessage(),
             $result->getPaymentRef(),
@@ -61,17 +62,31 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
 
     public function processTransaction(TransactionPaymentInterface $transaction)
     {
+        $ref = $transaction->getReference();
+
         $debit = Debit::new()
             ->withAmount($transaction->getValue())
             ->withCustomerId($transaction->getFrom())
             ->withMerchantId($this->merchant->getAddress())
             ->withMerchantKey($this->merchant->getCode())
             ->withMerchantName($this->merchant->getName())
-            ->withTxnReference($transaction->getReference());
+            ->withTxnReference($ref);
 
         $response = $this->client->sendRequest($debit);
 
-        print_r($response);
+        // invoke response listeners with a pending transaction result
+        if (!empty($this->responseListeners)) {
+            foreach ($this->responseListeners as $callback) {
+                $callback(new TransactionResult(
+                    $ref,
+                    false,
+                    4,
+                    'Pending transaction',
+                    null,
+                    null
+                ));
+            }
+        }
 
         return $response->isOk();
     }

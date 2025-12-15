@@ -9,45 +9,47 @@ class TransactionResult implements ProcessTransactionResultInterface
     /** @var string */
     private $ref;
 
-    /** @var string|int */
-    private $code;
+    /** @var bool */
+    private $processed;
 
     /** @var string */
+    private $status;
+
+    /** @var ?string */
     private $message;
 
-    /** @var string|int */
-    private $pTxnId;
+    /** @var ?string */
+    private $payment_ref;
 
-    /** @var int|string */
-    private $processedAt;
-
+    /** @var ?string */
+    private $at;
+    
     /**
-     * @param mixed       $code
-     * @param mixed       $pTxnId
-     * @param string|null $processedAt
+     * transaction result constructor
+     * 
+     * @param string $ref 
+     * @param bool $processed 
+     * @param int|string $status 
+     * @param null|string $message 
+     * @param null|string $payment_ref 
+     * @param null|string $at
+     * 
      */
-    public function __construct(
-        string $ref,
-        $code,
-        string $message,
-        $pTxnId,
-        $processedAt = null
-    ) {
+    public function __construct(string $ref, bool $processed, int|string $status, ?string $message, ?string $payment_ref, ?string $at = null) {
+        if ($processed === true && (is_null($payment_ref) || is_null($at))) {
+            throw new \RuntimeException('transaction result with processed property equals true, requires payment reference an date, None given');
+        }
         $this->ref = $ref;
-        $this->code = $code;
+        $this->processed = $processed;
+        $this->status = (string)$status;
         $this->message = $message;
-        $this->pTxnId = $pTxnId;
-        $this->processedAt = $processedAt;
+        $this->payment_ref = $payment_ref;
+        $this->at = $at;
     }
 
     public function isValidated()
     {
-        return 0 === (int) $this->code;
-    }
-
-    public function getProcessorReference()
-    {
-        return $this->pTxnId;
+        return $this->processed;
     }
 
     public function getReference()
@@ -55,9 +57,9 @@ class TransactionResult implements ProcessTransactionResultInterface
         return $this->ref;
     }
 
-    public function processedAt()
+    public function getProcessorReference()
     {
-        return \DateTimeImmutable::createFromFormat('Y-m-d H:i:s', date('Y-m-d H:i:s', isset($this->processedAt) ? strtotime($this->processedAt) : time()));
+        return $this->payment_ref;
     }
 
     public function getStatusText()
@@ -65,12 +67,24 @@ class TransactionResult implements ProcessTransactionResultInterface
         return $this->message;
     }
 
+    public function processedAt()
+    {
+        $timestamp = isset($this->at) ? strtotime($this->at) : time();
+        if ($timestamp !== false) {
+            $dateTime = new \DateTimeImmutable;
+            $dateTime->setTimestamp($timestamp);
+            return $dateTime;
+        }
+
+        return new \DateTimeImmutable;
+    }
+
     public function getResponse()
     {
         return [
-            'code' => $this->code,
+            'code' => $this->status,
             'message' => $this->message,
-            'transactionId' => $this->pTxnId,
+            'transactionId' => $this->payment_ref,
         ];
     }
 }

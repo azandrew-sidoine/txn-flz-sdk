@@ -57,10 +57,8 @@ class Factory implements LibraryFactoryInterface
         $merchantMsisdn = $configuration->get('merchant.msisdn', $configuration->get('api.merchant.msisdn'));
         $merchant = new Merchant($merchantMsisdn, $merchantRef, $merchantName);
 
-        $debitAPI  = Flooz::NewDebit($host, $factory);
-
         // returns the contructed client
-        return new Client($merchant, $debitAPI);
+        return new Client($merchant, Flooz::NewDebit($host, $factory));
     }
 
 
