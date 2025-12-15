@@ -8,11 +8,10 @@ use Drewlabs\Flz\Debit;
 use Drewlabs\Flz\DebitStatusResult;
 use Drewlabs\Txn\OneWayTransactionProcessorInterface;
 use Drewlabs\Txn\ProcessorLibraryInterface;
-use Drewlabs\Txn\TransactionalProcessorLibraryInterface;
 use Drewlabs\Txn\TransactionPaymentInterface;
 use Drewlabs\Txn\TransactionResultListener;
 
-class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInterface, TransactionalProcessorLibraryInterface
+class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInterface
 {
 
     /** @var TransactionClientInterface */
@@ -96,10 +95,5 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
         if ($callback instanceof \Closure || $callback instanceof TransactionResultListener) {
             $this->responseListeners[] = $callback;
         }
-    }
-
-    public function requestOTP(string $payeerid)
-    {
-        throw new \BadFunctionCallException('Flz:Client does not support otp request implementation');
     }
 }
