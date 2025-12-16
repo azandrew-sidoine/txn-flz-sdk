@@ -1,5 +1,5 @@
 {
-    "name": "drewlabs/txn-flz-client",
+    "name": "drewlabs/txn-flz-sdk",
     "description": "Moov money API driver for txn platform",
     "type": "library",
     "require-dev": {
