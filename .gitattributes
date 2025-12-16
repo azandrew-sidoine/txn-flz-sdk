@@ -9,3 +9,4 @@ Changelog export-ignore
 .gitignore export-ignore
 phpunit.xml export-ignore
 /.github export-ignore 
+README.md export-ignore
