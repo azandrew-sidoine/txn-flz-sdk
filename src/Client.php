@@ -1,6 +1,6 @@
 <?php
 
-namespace Drewlabs\Txn\Flooz;
+namespace Drewlabs\Txn\Flz;
 
 use Drewlabs\Flz\Contracts\MerchantInterface;
 use Drewlabs\Flz\Contracts\TransactionClientInterface;
@@ -50,11 +50,11 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
         }
 
         return new TransactionResult(
-            $result->getOrderRef(),
+            $value->getOrderRef() ?? $result->getOrderRef(),
             $value->isProcessed(),
-            $result->getStatus(),
-            $result->getMessage(),
-            $result->getPaymentRef(),
+            $value->getStatus(),
+            $value->getReasonPhrase(),
+            $value->getPaymentRef(),
             $metadata->getDate()
         );
     }
@@ -62,10 +62,11 @@ class Client implements ProcessorLibraryInterface, OneWayTransactionProcessorInt
     public function processTransaction(TransactionPaymentInterface $transaction)
     {
         $ref = $transaction->getReference();
+        $from = str_replace(['+', '-', '_'], '', $transaction->getFrom());
 
         $debit = Debit::new()
             ->withAmount($transaction->getValue())
-            ->withCustomerId($transaction->getFrom())
+            ->withCustomerId($from)
             ->withMerchantId($this->merchant->getAddress())
             ->withMerchantKey($this->merchant->getCode())
             ->withMerchantName($this->merchant->getName())

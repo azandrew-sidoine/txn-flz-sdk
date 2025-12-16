@@ -1,6 +1,6 @@
 <?php
 
-namespace Drewlabs\Txn\Flooz;
+namespace Drewlabs\Txn\Flz;
 
 use Drewlabs\Flz\ApiKeyTokenFactory;
 use Drewlabs\Flz\BasicAuthTokenFactory;

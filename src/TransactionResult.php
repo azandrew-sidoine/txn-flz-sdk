@@ -1,6 +1,6 @@
 <?php
 
-namespace Drewlabs\Txn\Flooz;
+namespace Drewlabs\Txn\Flz;
 
 use Drewlabs\Txn\ProcessTransactionResultInterface;
 

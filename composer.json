@@ -1,19 +1,19 @@
 {
-    "name": "drewlabs/txn-flooz-client",
-    "description": "Flooz API driver for txn platform",
+    "name": "drewlabs/txn-flz-client",
+    "description": "Moov money API driver for txn platform",
     "type": "library",
     "require-dev": {
-        "phpunit/phpunit": "^12.4"
+        "phpunit/phpunit": ">=7.0"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Drewlabs\\Txn\\Flooz\\": "src/"
+            "Drewlabs\\Txn\\Flz\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Drewlabs\\Txn\\Flooz\\Tests\\": "tests/"
+            "Drewlabs\\Txn\\Flz\\Tests\\": "tests/"
         }
     },
     "authors": [
@@ -27,19 +27,10 @@
         "php": "^7.2|^8.0",
         "drewlabs/libman": "^0.2.10",
         "drewlabs/txn-contracts": "^0.2.2",
-        "drewlabs/flz-sdk": "@dev"
+        "drewlabs/flz-sdk": "^0.1.3"
     },
     "config": {
         "optimize-autoloader": true,
         "sort-packages": true
-    },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "/Users/azandrew/workspace/lib/php/flooz",
-            "options": {
-                "symlink": true
-            }
-        }
-    ]
+    }
 }

@@ -8,3 +8,4 @@ Todo export-ignore
 Changelog export-ignore
 .gitignore export-ignore
 phpunit.xml export-ignore
+/.github export-ignore 
