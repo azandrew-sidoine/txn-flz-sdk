@@ -25,7 +25,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": "^7.2|^8.0",
-        "drewlabs/libman": "^0.2.10",
+        "drewlabs/libman": "^0.2.0",
         "drewlabs/txn-contracts": "^0.2.2",
         "drewlabs/flz-sdk": "^0.1.3"
     },
